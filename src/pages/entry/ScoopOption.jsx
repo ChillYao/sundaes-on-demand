@@ -1,7 +1,9 @@
 import React from 'react';
 import Col from 'react-bootstrap/Col';
+import { useOrderDetails } from '../../contexts/OrderDetails';
 
 function ScoopOption({ name, imagePath }) {
+  const { updateItemCount } = useOrderDetails();
   return (
     <Col xs={12} sm={6} md={4} lg={3} style={{ textAlign: 'center' }}>
       <img
