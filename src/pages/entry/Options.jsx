@@ -14,8 +14,6 @@ export default function Options({ optionType }) {
   const [error, setError] = useState(false);
   const { totals } = useOrderDetails();
 
-  //optionType is 'scoops' or 'toppings'
-
   useEffect(() => {
     axios
       .get(`http://localhost:3030/${optionType}`)
@@ -29,9 +27,7 @@ export default function Options({ optionType }) {
 
   // TODO: Replace null with ToppingOption when available
   const ItemCompoent = optionType === 'scoops' ? ScoopOption : ToppingOption;
-  const title =
-    optionType[0].toUpperCase() + optionType[1].slice(1).toLowerCase();
-
+  const title = optionType[0].toUpperCase() + optionType.slice(1).toLowerCase();
   const optionItems = items.map((item) => (
     <ItemCompoent key={item.name} name={item.name} imagePath={item.imagePath} />
   ));
