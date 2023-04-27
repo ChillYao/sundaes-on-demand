@@ -3,9 +3,9 @@ import { Col, Form } from 'react-bootstrap';
 import { useOrderDetails } from '../../contexts/OrderDetails';
 
 const ToppingOption = ({ name, imagePath }) => {
-  const { updateItemcount } = useOrderDetails();
+  const { updateItemCount } = useOrderDetails();
   const handleChange = (e) => {
-    updateItemcount(name, e.target.checked ? 1 : 0, 'toppings');
+    updateItemCount(name, e.target.checked ? 1 : 0, 'toppings');
   };
   return (
     <Col xs={12} sm={6} md={4} lg={4} style={{ textAlign: 'center' }}>

@@ -1,7 +1,6 @@
 import { render, screen } from '../../../test-utils/testing-library-utils';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
-import { logRoles } from '@testing-library/react';
 
 test('update scoops subtotal when scoop changes', async () => {
   render(<Options optionType='scoops' />);
@@ -54,7 +53,6 @@ test('update toppings subtotal when topping changes', async () => {
   expect(toppingsSubtotal).toHaveTextContent('1.50');
 
   await screen.findByText('Cherries');
-  logRoles(container);
 
   const toppingsTickBoxCherries = await screen.findByRole('checkbox', {
     name: 'Cherries',
