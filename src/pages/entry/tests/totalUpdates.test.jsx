@@ -1,6 +1,7 @@
 import { render, screen } from '../../../test-utils/testing-library-utils';
 import Options from '../Options';
 import userEvent from '@testing-library/user-event';
+import OrderEntry from '../OrderEntry';
 
 test('update scoops subtotal when scoop changes', async () => {
   render(<Options optionType='scoops' />);
@@ -34,7 +35,7 @@ test('update scoops subtotal when scoop changes', async () => {
 });
 
 test('update toppings subtotal when topping changes', async () => {
-  const { container } = render(<Options optionType='toppings' />);
+  render(<Options optionType='toppings' />);
   const toppingsSubtotal = await screen.findByText('Toppings total: $', {
     exact: false,
   });
@@ -67,4 +68,74 @@ test('update toppings subtotal when topping changes', async () => {
   expect(toppingsTickBoxCherries).not.toBeChecked();
   expect(toppingsTickBoxGummi).not.toBeChecked();
   expect(toppingsSubtotal).toHaveTextContent('0.00');
+});
+
+describe('grand total', () => {
+  test('grand total starts at $0.00', async () => {
+    render(<OrderEntry />);
+    const grandTotal = await screen.findByText('Grand total: $', {
+      exact: false,
+    });
+    expect(grandTotal).toHaveTextContent('0.00');
+  });
+
+  test('grand total updates properly if scoops added firstly', async () => {
+    render(<OrderEntry />);
+    const user = userEvent.setup();
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
+    const grandTotal = await screen.findByText('Grand total: $', {
+      exact: false,
+    });
+    expect(grandTotal).toHaveTextContent('2.00');
+    const toppingsTickBoxCherries = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+    await user.click(toppingsTickBoxCherries);
+    expect(grandTotal).toHaveTextContent('3.50');
+  });
+
+  test('grand total updates properly if toppings added firstly', async () => {
+    render(<OrderEntry />);
+    const grandTotal = await screen.findByText('Grand Total: $', {
+      exact: false,
+    });
+    const user = userEvent.setup();
+    const toppingsTickBoxCherries = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+    await user.click(toppingsTickBoxCherries);
+    expect(grandTotal).toHaveTextContent('1.50');
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
+    expect(grandTotal).toHaveTextContent('3.50');
+  });
+
+  test('grand total updates properly if item is removed', async () => {
+    render(<OrderEntry />);
+    const grandTotal = await screen.findByText('Grand Total: $', {
+      exact: false,
+    });
+    const toppingsTickBoxCherries = await screen.findByRole('checkbox', {
+      name: 'Cherries',
+    });
+    const vanillaInput = await screen.findByRole('spinbutton', {
+      name: 'Vanilla',
+    });
+    const user = userEvent.setup();
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, '1');
+    await user.click(toppingsTickBoxCherries);
+    expect(grandTotal).toHaveTextContent('3.50');
+    await user.type(vanillaInput, '0');
+    expect(grandTotal).toHaveTextContent('1.50');
+    await user.click(toppingsTickBoxCherries);
+    expect(grandTotal).toHaveTextContent('0.00');
+  });
 });
