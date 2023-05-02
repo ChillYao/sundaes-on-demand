@@ -45,7 +45,6 @@ test('update toppings subtotal when topping changes', async () => {
     name: 'Gummi bears',
   });
   expect(toppingsTickBoxGummi).not.toBeChecked();
-  debugger;
 
   const user = userEvent.setup();
   //await user.clear(toppingsTickBoxGummi);
