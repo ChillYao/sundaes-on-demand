@@ -21,25 +21,25 @@ test('order phases for happy path', async () => {
   const orderButton = await screen.findByRole('button', { name: /order/i });
   await user.click(orderButton);
   // check summary information based on order
-  const orderSummaryTitle = await screen.findyByText('Order Summary');
+  const orderSummaryTitle = await screen.findByText('Order Summary');
   expect(orderSummaryTitle).toBeInTheDocument();
-  const totalAmount = await screen.findyByText('Totals $3.50');
+  const totalAmount = await screen.findByText('Totals: $3.50');
   expect(totalAmount).toBeInTheDocument();
   const termsAndConditions = await screen.findByRole('checkbox', {
-    value: { text: 'I agree to' },
+    name: /I agree to/i,
   });
   expect(termsAndConditions).toBeInTheDocument();
   const confirmButton = await screen.findByRole('button', {
-    name: 'Confirm Order',
+    name: /Confirm order/i,
   });
   expect(confirmButton).toBeInTheDocument();
   // accept terms and conditions and click button to confirm order
   await user.click(termsAndConditions);
   await user.click(confirmButton);
   // confirm order number on confirmation page
-  expect(await screen.findByText('Thank you!')).toBeInTheDocument();
+  expect(await screen.findByText(/Thank You/i)).toBeInTheDocument();
   expect(
-    await screen.findByText(/order numbet/i, { exact: false })
+    await screen.findByText(/order number/i, { exact: false })
   ).toBeInTheDocument();
   // click "new order" button on confirmation page
   const newOrderButton = await screen.findByRole('button', {

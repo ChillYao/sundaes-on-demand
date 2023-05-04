@@ -36,7 +36,10 @@ export default function SummaryForm({ setOrderPhase }) {
         variant='primary'
         type='submit'
         disabled={!tcChecked}
-        onClick={() => setOrderPhase('complete')}
+        onClick={(e) => {
+          e.preventDefault();
+          setOrderPhase('complete');
+        }}
       >
         Confirm order
       </Button>
