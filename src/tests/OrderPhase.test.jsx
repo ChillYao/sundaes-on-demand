@@ -62,3 +62,19 @@ test('order phases for happy path', async () => {
 
   unmount();
 });
+
+test('show no toppings if only scoops are selected', async () => {
+  const { unmount } = render(<App />);
+  const scoopOption = await screen.findByRole('spinbutton', {
+    name: /chocolate/i,
+  });
+  const user = userEvent.setup();
+  await user.clear(scoopOption);
+  await user.type(scoopOption, '1');
+  const orderButton = await screen.findByRole('button', { name: /order/i });
+  await user.click(orderButton);
+  const toppingInfo = screen.queryByText('Toppings: $', { exact: false });
+  expect(toppingInfo).not.toBeInTheDocument();
+  unmount();
+});
+test('show no toppings if topping is selected but canceled', () => {});
