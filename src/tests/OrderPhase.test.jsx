@@ -5,7 +5,7 @@ import App from '../App';
 
 test('order phases for happy path', async () => {
   //render app
-  render(<App />);
+  const { unmount } = render(<App />);
   // add ice cream scoops and toppings
   const scoopOption = await screen.findByRole('spinbutton', {
     name: /chocolate/i,
@@ -36,6 +36,9 @@ test('order phases for happy path', async () => {
   // accept terms and conditions and click button to confirm order
   await user.click(termsAndConditions);
   await user.click(confirmButton);
+  // the loading page does not show
+  const loadingPage = screen.queryByText(/loading/i);
+  expect(loadingPage).not.toBeInTheDocument();
   // confirm order number on confirmation page
   expect(await screen.findByText(/Thank You/i)).toBeInTheDocument();
   expect(
@@ -56,4 +59,6 @@ test('order phases for happy path', async () => {
   });
   expect(toppingsSubtotal).toHaveTextContent('0.00');
   // do we need to await anything to aviod test errors?
+
+  unmount();
 });

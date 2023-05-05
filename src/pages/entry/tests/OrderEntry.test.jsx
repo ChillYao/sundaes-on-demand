@@ -17,7 +17,7 @@ test('display error code for scoops and topping', async () => {
     )
   );
 
-  render(<OrderEntry />);
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
 
   await waitFor(async () => {
     const allErrorMessage = await screen.findAllByRole('alert', {
