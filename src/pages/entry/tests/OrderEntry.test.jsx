@@ -27,3 +27,9 @@ test('display error code for scoops and topping', async () => {
     expect(allErrorMessage).toHaveLength(2);
   });
 });
+
+test('the order button is disabled when nothing is ordered',async()=>{
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
+  const orderButton = await screen.findByRole('button',{name:/order sundae/i});
+  expect(orderButton).toBeDisabled();
+})
